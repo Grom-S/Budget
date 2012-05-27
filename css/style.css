@@ -1,0 +1,26 @@
+.budget-bar {
+    position: relative;
+    margin-bottom: 25px;
+}
+
+.legend {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    top: 35px;
+}
+.legend .value {
+
+    position: absolute;
+}
+.legend .value.first {}
+.legend .value.last {
+    position: absolute;
+    right: 0;
+}
+.legend .value.spent {
+    left: 30%;
+}
+.legend .value.left {
+    left: 60%;
+}
