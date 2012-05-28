@@ -25,10 +25,6 @@ $('.search-form form').submit(function(){
 
 <h1>Manage Transactions</h1>
 
-<p>
-You may optionally enter a comparison operator (<b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, <b>&gt;=</b>, <b>&lt;&gt;</b>
-or <b>=</b>) at the beginning of each of your search values to specify how the comparison should be done.
-</p>
 
 <?php echo CHtml::link('Advanced Search','#',array('class'=>'search-button btn')); ?>
 <div class="search-form" style="display:none">
@@ -37,22 +33,18 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 )); ?>
 </div><!-- search-form -->
 
+<?php //echo CVarDumper::dump($model->search()) ?>
+
+
 <?php $this->widget('bootstrap.widgets.BootGridView',array(
 	'id'=>'transaction-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
 	'columns'=>array(
-		'id',
-		'transaction_type_id',
-		'account_id',
-		'category_id',
-		'client_id',
-		'currency_id',
-		/*
-		'amount',
-		'date',
-		'description',
-		*/
+        'date',
+        'amount',
+        'category.name',
+        'description',
 		array(
 			'class'=>'bootstrap.widgets.BootButtonColumn',
 		),

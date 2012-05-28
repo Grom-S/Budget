@@ -116,6 +116,8 @@ class Transaction extends CActiveRecord
 		$criteria->compare('date',$this->date,true);
 		$criteria->compare('description',$this->description,true);
 
+        $criteria->with = array('category');
+
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
