@@ -53,8 +53,9 @@ class Transaction extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('transaction_type_id, account_id, currency_id, amount, date', 'required'),
-			array('transaction_type_id, account_id, category_id, client_id, currency_id, amount', 'length', 'max'=>10),
+			array('transaction_type_id, account_id, category_id, client_id, currency_id', 'length', 'max'=>10),
 			array('description', 'safe'),
+            array('amount', 'match', 'pattern' => '/^\d+(\.\d{1,2})?([\+\-\*\/]\d+(\.\d{1,2})?)*$/'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, transaction_type_id, account_id, category_id, client_id, currency_id, amount, date, description', 'safe', 'on'=>'search'),
@@ -68,13 +69,13 @@ class Transaction extends CActiveRecord
 	{
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
-		return array(
-			'account' => array(self::BELONGS_TO, 'Account', 'account_id'),
-			'category' => array(self::BELONGS_TO, 'Category', 'category_id'),
-			'client' => array(self::BELONGS_TO, 'Client', 'client_id'),
-			'currency' => array(self::BELONGS_TO, 'Currency', 'currency_id'),
-			'transactionType' => array(self::BELONGS_TO, 'TransactionType', 'transaction_type_id'),
-		);
+        return array(
+            'account'         => array(self::BELONGS_TO, 'Account', 'account_id'),
+            'category'        => array(self::BELONGS_TO, 'Category', 'category_id'),
+            'client'          => array(self::BELONGS_TO, 'Client', 'client_id'),
+            'currency'        => array(self::BELONGS_TO, 'Currency', 'currency_id'),
+            'transactionType' => array(self::BELONGS_TO, 'TransactionType', 'transaction_type_id'),
+        );
 	}
 
 	/**
@@ -127,6 +128,10 @@ class Transaction extends CActiveRecord
     protected function beforeSave()
     {
         $this->date = date('Y-m-d', strtotime($this->date));
+
+        $evalMath = new EvalMath();
+        $this->amount = $evalMath->evaluate($this->amount);
+
         return parent::beforeSave();
     }
 
@@ -152,5 +157,12 @@ class Transaction extends CActiveRecord
     {
         return (int)$this->transaction_type_id === TransactionType::INCOME_TYPE_ID;
     }
+
+
+    public function getAmountInDefaultCurrency()
+    {
+        return $this->amount * $this->currency->rate;
+    }
+
 
 }

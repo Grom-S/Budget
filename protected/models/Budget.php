@@ -124,7 +124,7 @@ class Budget extends CActiveRecord
 
             foreach ($category->getExpenseTransactions() as $transaction) {
 
-                $spent += $transaction->amount * $transaction->currency->rate;
+                $spent += $transaction->getAmountInDefaultCurrency();
             }
         }
 

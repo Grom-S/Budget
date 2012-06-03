@@ -96,7 +96,9 @@ class Category extends CActiveRecord
 	}
 
 
-
+    /**
+     * @return Transaction[]
+     */
     public function getExpenseTransactions()
     {
         return Transaction::model()->expenses()->findAllByAttributes(array('category_id' => $this->id));
