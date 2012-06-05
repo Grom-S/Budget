@@ -19,11 +19,20 @@ Class BudgetBar extends  BootProgress {
         $this->percent = $this->model->getPercentage($start, $end);
 
         // set color of the bar
-        if ($this->model->isIncomeType()) {
-            $this->type = self::TYPE_SUCCESS;
-        }
-        elseif ($this->model->isExpenseType()) {
+//        if ($this->model->isIncomeType()) {
+//            $this->type = self::TYPE_SUCCESS;
+//        }
+//        elseif ($this->model->isExpenseType()) {
+//            $this->type = self::TYPE_DANGER;
+//        }
+
+        $idealPercentage = $this->model->getIdealPercentage($start, $end);
+
+        if ($this->percent > $idealPercentage) {
             $this->type = self::TYPE_DANGER;
+        }
+        else {
+            $this->type = self::TYPE_SUCCESS;
         }
 
 
@@ -33,11 +42,17 @@ Class BudgetBar extends  BootProgress {
 
     public function run()
     {
-        parent::run();
-
+//        parent::run();
 
         $start = new DateTime("2012-06-01 01:11:50");
         $end = new DateTime("2012-06-30 05:56:40");
+
+        echo CHtml::openTag('div', $this->htmlOptions);
+        echo '<div class="bar" style="width: '.$this->percent.'%;"></div>';
+        echo '<div class="ideal-value" style="width: '.$this->model->getIdealPercentage($start, $end).'%" title="'.round($this->model->getIdealValue($start, $end), 2).'">&nbsp;</div>';
+        echo '</div>';
+
+
 
         ?>
             <div class="legend">
@@ -45,6 +60,7 @@ Class BudgetBar extends  BootProgress {
                 <span class="last value"><?php echo round($this->model->getAllowedAmount($start, $end), 2) ?></span>
                 <span class="spent value"><?php echo round($this->model->spent($start, $end)) ?></span>
                 <span class="left value"><?php echo round($this->model->leftToSpent($start, $end)) ?></span>
+
             </div>
 
         <?php

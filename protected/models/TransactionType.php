@@ -19,6 +19,8 @@ class TransactionType extends CActiveRecord
 
     const EXPENSE_TYPE_ID = 2;
 
+    const INITIAL_TYPE_ID = 3;
+
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.

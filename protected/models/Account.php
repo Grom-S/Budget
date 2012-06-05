@@ -87,4 +87,70 @@ class Account extends CActiveRecord
 			'criteria'=>$criteria,
 		));
 	}
+
+
+    public function getAmount()
+    {
+        $sql = "
+            SELECT
+              SUM(t.amount * c.rate)
+
+            FROM budget b
+            JOIN budget_category bc
+              ON b.id = bc.budget_id
+            JOIN `transaction` t
+              ON bc.category_id = t.category_id
+            JOIN currency c
+              ON t.currency_id = c.id
+
+            WHERE b.id = :budget_id
+              AND t.transaction_type_id = :transaction_type_id
+              AND t.date BETWEEN :start_date AND :end_date
+        ";
+
+
+        $cmd = Yii::app()->db->createCommand($sql);
+        $cmd->params = array(
+            ':budget_id'           => $this->id,
+            ':transaction_type_id' => $this->transaction_type_id,
+            ':start_date'          => $start_date->format('Y-m-d'),
+            ':end_date'            => $end_date->format('Y-m-d'),
+        );
+
+        $spent = $cmd->queryScalar();
+    }
+
+
+    function getTotal($type = TransactionType::EXPENSE_TYPE_ID)
+    {
+
+        $sql = "
+            SELECT SUM(t.amount * c.rate)
+            FROM `transaction` t
+            JOIN currency c ON c.id = t.currency_id
+            WHERE account_id = :account_id
+            AND transaction_type_id = :transaction_type_id
+        ";
+
+        $cmd = Yii::app()->db->createCommand($sql);
+
+        $cmd->params = array(
+            ':account_id'          => $this->id,
+            ':transaction_type_id' => $type,
+        );
+
+        return $cmd->queryScalar();
+    }
+
+
+    public function getCurrentValue()
+    {
+        $initial_value = $this->getTotal(TransactionType::INITIAL_TYPE_ID);
+        $income        = $this->getTotal(TransactionType::INCOME_TYPE_ID);
+        $expenses      = $this->getTotal(TransactionType::EXPENSE_TYPE_ID);
+
+        return $initial_value + $income - $expenses;
+    }
+
+
 }

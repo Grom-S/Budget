@@ -102,7 +102,7 @@ class Budget extends CActiveRecord
 		));
 	}
 
-
+    // Calculates percentage of how much spent
     public function getPercentage($start_date, $end_date) {
 
         $budget_amount = $this->getAllowedAmount($start_date, $end_date);
@@ -121,7 +121,6 @@ class Budget extends CActiveRecord
     {
         return (int)$this->transaction_type_id === TransactionType::EXPENSE_TYPE_ID;
     }
-
 
 
     public function getAmountInDefaultCurrency()
@@ -192,5 +191,26 @@ class Budget extends CActiveRecord
     }
 
 
-    // get calculate percentage of how much spent
+    public function getIdealValue(DateTime $start_date, DateTime $end_date)
+    {
+        $budget_amount = $this->getAllowedAmount($start_date, $end_date);
+        $days_count = $start_date->diff($end_date, true)->days + 1;
+        $current_date = new DateTime();
+        $days_passed = $current_date->diff($start_date, TRUE)->days + 1;
+
+        $result = ($budget_amount / $days_count) * $days_passed;
+
+        return $result;
+    }
+
+
+    public function getIdealPercentage(DateTime $start_date, DateTime $end_date)
+    {
+        $budget_amount = $this->getAllowedAmount($start_date, $end_date);
+        $ideal_value = $this->getIdealValue($start_date, $end_date);
+
+        return $ideal_value * 100 / $budget_amount;
+    }
+
+
 }

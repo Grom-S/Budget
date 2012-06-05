@@ -24,3 +24,11 @@
 .legend .value.left {
     left: 60%;
 }
+
+
+.ideal-value {
+    position: relative;
+    top: -18px;
+    border-right: 2px dotted rgba(7, 69, 173, 0.67);
+    width: 1px;
+}
