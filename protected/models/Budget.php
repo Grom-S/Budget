@@ -9,6 +9,8 @@
  * @property string $currency_id
  * @property string $amount
  * @property string $name
+ * @property string $date_from
+ * @property string $date_to
  *
  * The followings are the available model relations:
  * @property Currency $currency
@@ -99,6 +101,7 @@ class Budget extends CActiveRecord
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
+            'pagination'=> array('pageSize'=> 30),
 		));
 	}
 

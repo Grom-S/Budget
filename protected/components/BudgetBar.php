@@ -12,8 +12,8 @@ Class BudgetBar extends  BootProgress {
     public function init()
     {
 
-        $start = new DateTime("2012-06-01 01:11:50");
-        $end = new DateTime("2012-06-30 05:56:40");
+        $start = new DateTime($this->model->date_from);
+        $end = new DateTime($this->model->date_to);
 
         // set percentage of the bar
         $this->percent = $this->model->getPercentage($start, $end);
@@ -44,8 +44,8 @@ Class BudgetBar extends  BootProgress {
     {
 //        parent::run();
 
-        $start = new DateTime("2012-06-01 01:11:50");
-        $end = new DateTime("2012-06-30 05:56:40");
+        $start = new DateTime($this->model->date_from);
+        $end = new DateTime($this->model->date_to);
 
         echo CHtml::openTag('div', $this->htmlOptions);
         echo '<div class="bar" style="width: '.$this->percent.'%;"></div>';

@@ -107,21 +107,25 @@ class Transaction extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('id',$this->id,true);
-		$criteria->compare('transaction_type_id',$this->transaction_type_id,true);
-		$criteria->compare('account_id',$this->account_id,true);
-		$criteria->compare('category_id',$this->category_id,true);
-		$criteria->compare('client_id',$this->client_id,true);
-		$criteria->compare('currency_id',$this->currency_id,true);
-		$criteria->compare('amount',$this->amount,true);
-		$criteria->compare('date',$this->date,true);
-		$criteria->compare('description',$this->description,true);
+		$criteria->compare('id',$this->id,TRUE);
+		$criteria->compare('transaction_type_id',$this->transaction_type_id,TRUE);
+		$criteria->compare('account_id',$this->account_id,TRUE);
+		$criteria->compare('category_id',$this->category_id,TRUE);
+		$criteria->compare('client_id',$this->client_id,TRUE);
+		$criteria->compare('currency_id',$this->currency_id,TRUE);
+		$criteria->compare('amount',$this->amount,TRUE);
+		$criteria->compare('date',$this->date,TRUE);
+		$criteria->compare('description',$this->description,TRUE);
+
+        $criteria->order = 'date DESC';
+
 
         $criteria->with = array('category');
 
-		return new CActiveDataProvider($this, array(
-			'criteria'=>$criteria,
-		));
+        return new CActiveDataProvider($this, array(
+            'criteria'  => $criteria,
+            'pagination'=> array('pageSize'=> 25),
+        ));
 	}
 
 

@@ -92,9 +92,12 @@ class BudgetController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Budget');
+		$dataProvider=new CActiveDataProvider('Budget', array(
+            'pagination'=> array('pageSize'=> 25),
+        ));
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
+
 		));
 	}
 
